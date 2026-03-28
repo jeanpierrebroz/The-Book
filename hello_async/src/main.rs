@@ -1,17 +1,16 @@
-use std::time::Duration;
+use trpl::StreamExt;
 
 fn main() {
     trpl::run(async {
-        trpl::spawn_task(async {
-            for i in 1..10 {
-                println!("hi number {i} from the first task!");
-                trpl::sleep(Duration::from_millis(500)).await;
-            }
-        });
+        let values = 1..101;
+        let iter = values.map(|n| n * 2);
+        let stream = trpl::stream_from_iter(iter);
 
-        for i in 1..5 {
-            println!("hi number {i} from the second task!");
-            trpl::sleep(Duration::from_millis(500)).await;
+        let mut filtered =
+            stream.filter(|value| value % 3 == 0 || value % 5 == 0);
+
+        while let Some(value) = filtered.next().await {
+            println!("The value was: {value}");
         }
     });
 }
