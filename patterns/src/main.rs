@@ -1,8 +1,12 @@
-fn main() {
-    let x = 5;
+struct Point {
+    x: i32,
+    y: i32,
+}
 
-    match x {
-        1..=5 => println!("one through five"),
-        _ => println!("something else"),
-    }
+fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    let Point { x, y } = p;
+    assert_eq!(0, x);
+    assert_eq!(7, y);
 }
